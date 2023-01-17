@@ -1,32 +1,33 @@
+
 clear all;
 close all;
 clc;
 
-load('best_q_idx_256.mat');
-load('./Datasets/Coco/hashCodes/hashCodes_64.mat');
-data = hashCodes_64;
+
+load('./Datasets/retinamnist/hashCodes/hashCodes_256.mat');
+data = hashCodes_256;
 N = length(data);
 
-load('./Datasets/Coco/hashCodes/features_64.mat');
-features = features_64;
+load('./Datasets/retinamnist/hashCodes/features_256.mat');
+features = features_256;
 
-load('./Datasets/Coco/labels/labels_train.mat');
+load('./Datasets/retinamnist/labels/labels_train.mat');
 labels = labels_train;
 
 
-load('./Datasets/Coco/hashCodes/hashCodes_test_64.mat');
-%data_test = hashCodes_test_64;
-data_test = hashCodes_test_64(best_q_idx_256(1:5000), :);
+load('./Datasets/retinamnist/hashCodes/hashCodes_test_256.mat');
+data_test = hashCodes_test_256;
 
-load('./Datasets/Coco/hashCodes/features_test_64.mat');
-%features_test = features_test_64;
-features_test = features_test_64(best_q_idx_256(1:5000,:),:);
 
-load('./Datasets/Coco/labels/labels_test.mat');
-%labels_test = labels_test;
-labels_test = labels_test(best_q_idx_256(1:5000,:),:);
+load('./Datasets/retinamnist/hashCodes/features_test_256.mat');
+features_test = features_test_256;
 
-hR = 10; % Hamming Radious;
+
+load('./Datasets/retinamnist/labels/labels_test.mat');
+labels_test = labels_test;
+
+
+hR = 20; % Hamming Radious;
 i  = 1;
 n  = length(data_test);
 %k  = 1000;
@@ -79,4 +80,4 @@ for l = i:n
 mAP       = sum(avg_Precision(:,1)) /(n-i+1);
 ACC       = sum(acc(:,1)) / (n-i+1);
 
-best_q_idx_64 = find(avg_Precision > .6); 
+best_q_idx_256 = find(avg_Precision > .6); 
