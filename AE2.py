@@ -96,8 +96,8 @@ model.summary()
 
 
 def c_loss_1(y_true, y_pred):
-    #return  ( tf.keras.losses.binary_crossentropy(y_true, y_pred)) 
-    return  ( tf.keras.losses.mean_squared_error(y_true, y_pred))  
+    return  ( tf.keras.losses.binary_crossentropy(y_true, y_pred)) 
+    #return  ( tf.keras.losses.mean_squared_error(y_true, y_pred))  
 
 
 def c_loss_2(noise_3):
