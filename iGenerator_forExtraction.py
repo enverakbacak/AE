@@ -13,7 +13,7 @@ def generator(samples, batch_size=Config.batch_size):
             print("\n")
            
             batch_samples = samples[offset:offset+batch_size]
-            print(batch_samples[0])                 
+            #print(batch_samples[0])                 
             X = []
             for batch_sample in batch_samples:
               image  = cv2.imread(batch_sample[0])

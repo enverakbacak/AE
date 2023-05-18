@@ -26,7 +26,7 @@ import pandas as pd
 data=[]
 labels=[]
 # skip first line i.e. read header first and then iterate over each row od csv as a list
-with open('../Datasets/retinamnist/retinamnist_labels/retinamnist_all.csv', 'r') as read_obj:
+with open('../Datasets/Coco/labels/train_split_coco.csv', 'r') as read_obj:
     csv_reader = reader(read_obj)
     header = next(csv_reader)
     # Check file as empty
@@ -64,8 +64,8 @@ x               = Flatten()(x)
 x               = Dense(256)(x)
 '''
 x               = Dense(Config.hash_bits, activation='tanh', name = 'hashLayer')(x)
-x               = Dense(16)(x)
-x               = Reshape((4,4,1))(x)
+x               = Dense(256)(x)
+x               = Reshape((16,16,1))(x)
 x               = Conv2D(1, (3, 3), activation ='relu', padding ='same')(x)
 x               = UpSampling2D((2, 2))(x)
 x               = Conv2D(8, (3, 3), activation ='relu', padding ='same')(x)
@@ -83,8 +83,20 @@ print(model.summary())
 def c_loss_1(y_true, y_pred):
     return  ( tf.keras.losses.binary_crossentropy(y_true, y_pred)) 
 
+def c_loss_2(noise_1, noise_2):
+    noise_1 = (hashLayer > 0 )
+    #noise_1 = tf.cast(np.sign(features) , tf.float32 )
+    noise_2 = hashLayer 
+    return  tf.keras.metrics.Sum((tf.keras.losses.binary_crossentropy(noise_1, noise_2)))
+
+def c_loss_3(noise_3):
+    noise_3 =  (hashLayer > 0 )
+    return   tf.keras.metrics.Sum(noise_3)
+
+
 sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss = c_loss_1, 
+model.compile(loss = [c_loss_1, c_loss_2, c_loss_3], 
+              loss_weights = [1, 0.1, 0.1],
               optimizer=sgd, 
               )
 
@@ -97,6 +109,6 @@ model.fit(train_generator,
 
 
 model_json = model.to_json()
-with open("models/model_64.json", "w") as json_file:
+with open("models/model_AE_Coco_48.json", "w") as json_file:
     json_file.write(model_json)
-model.save_weights("models/weights_64.h5")  
+model.save_weights("models/weights_AE_Coco_48.h5")  
