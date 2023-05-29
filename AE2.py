@@ -83,8 +83,12 @@ print(model.summary())
 def c_loss_1(y_true, y_pred):
     return  ( tf.keras.losses.binary_crossentropy(y_true, y_pred)) 
 
+def c_loss_2(noise):
+    noise = np.sign(hashLayer)
+    return  tf.keras.metrics.Sum(noise)
+
 sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
-model.compile(loss = c_loss_1, 
+model.compile(loss = [c_loss_1, c_loss_2], 
               optimizer=sgd, 
               )
 
